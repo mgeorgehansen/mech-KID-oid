@@ -13,7 +13,7 @@ radius = 5.86799
 height = 12.4159
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 44.739
+radius = 157.922
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
@@ -130,7 +130,7 @@ shape = SubResource( 2 )
 position = Vector2( 0.808723, -2.58791 )
 frames = SubResource( 19 )
 animation = "idle"
-frame = 2
+frame = 4
 playing = true
 
 [node name="States" type="Node" parent="."]
