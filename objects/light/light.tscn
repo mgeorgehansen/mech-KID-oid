@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://environment/spotlight.png" type="Texture" id=1]
+[ext_resource path="res://sensors/light_emitter.gd" type="Script" id=2]
+[ext_resource path="res://objects/light/light_controller.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 87.6213
+
+[node name="Light" type="Light2D"]
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+
+[node name="LightEmitter" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LightEmitter"]
+shape = SubResource( 1 )

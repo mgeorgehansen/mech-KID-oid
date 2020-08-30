@@ -1,0 +1,11 @@
+Some game assets are modified or unmodified versions of Cyangmou's Free Side-Scroller Prototype Box asset pack (https://cyangmou.itch.io/free-side-scroller-prototype-box).
+
+License from the asset pack page is reproduced below:
+
+This asset is a completely free downloadable
+The elements in this set can be used for free and commercial digital-projects alike.
+The assets in this set may be altered, edited & changed.
+You are not allowed to resell the assets!
+Without my consent you are not allowed to redistribute this pack anywhere else!
+If you use this free set and want to put me in your credits, that's cool, but not required.
+
