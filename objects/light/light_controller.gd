@@ -1,3 +1,4 @@
+tool
 class_name LightController
 extends Light2D
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://characters/mech-KID-oid/kid.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/light/light.tscn" type="PackedScene" id=2]
 [ext_resource path="res://environment/tileset01_prototype_basicTiles.png" type="Texture" id=3]
 [ext_resource path="res://objects/switches/two-way-switch.tscn" type="PackedScene" id=4]
+[ext_resource path="res://objects/connector.gd" type="Script" id=5]
 
 [sub_resource type="TileSet" id=28]
 0/name = "tileset01_prototype_basicTiles.png 0"
@@ -647,10 +648,17 @@ visible = false
 color = Color( 0.246094, 0.246094, 0.246094, 1 )
 
 [node name="TwoWaySwitch" parent="." instance=ExtResource( 4 )]
-position = Vector2( 221.726, 169.844 )
+position = Vector2( 228.286, 169.844 )
 
-[node name="Light1" parent="TwoWaySwitch" instance=ExtResource( 2 )]
-position = Vector2( -104.846, 22.7763 )
+[node name="Connector" type="Node2D" parent="TwoWaySwitch"]
+script = ExtResource( 5 )
 
-[node name="Light2" parent="TwoWaySwitch" instance=ExtResource( 2 )]
-position = Vector2( 105.583, 23.1868 )
+[node name="Light1" parent="TwoWaySwitch/Connector" instance=ExtResource( 2 )]
+position = Vector2( -93.4551, 22.0481 )
+
+[node name="Connector2" type="Node2D" parent="TwoWaySwitch"]
+script = ExtResource( 5 )
+
+[node name="Light2" parent="TwoWaySwitch/Connector2" instance=ExtResource( 2 )]
+position = Vector2( 93.8029, 29.5951 )
+enabled = false

@@ -14,7 +14,7 @@ func _ready() -> void:
 		if !child.has_method("receive_power"):
 			continue
 		assert(lane_idx <= 1, "More than two components connected to TwoWaySwitch")
-		connected_components[lane_idx] = child
+		_connect_component(lane_idx, child)
 		lane_idx += 1
 	connect("switch_flipped", self, "_on_switch_flipped")
 	_on_switch_flipped(_active_lane)
@@ -23,6 +23,10 @@ func _ready() -> void:
 func _set_active_lane(active_lane: int) -> void:
 	_active_lane = active_lane
 	_on_switch_flipped(active_lane)
+
+
+func _connect_component(lane: int, comp: Node) -> void:
+	connected_components[lane] = comp
 
 
 func _on_switch_flipped(active_lane: int) -> void:
@@ -40,6 +44,10 @@ func toggle() -> void:
 	else:
 		_active_lane = 1
 	emit_signal("switch_flipped", _active_lane)
+
+
+func receive_power(powered: bool) -> void:
+	pass
 
 
 func _on_input_event(_viewport: Object, event: InputEvent, _shape_idx: int) -> void:
