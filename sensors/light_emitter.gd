@@ -1,3 +1,4 @@
+tool
 class_name LightEmitter
 extends Area2D
 
