@@ -1,55 +1,92 @@
 tool
 class_name TwoWaySwitch
-extends AnimatedSprite
+extends ElectricalComp
 
-signal switch_flipped(active_lane)
+# =============================================================================
+# Public interface
+# =============================================================================
 
-var connected_components = {}
+enum SwitchState { LEFT_OPEN, RIGHT_OPEN }
 
-export(int, 0, 1) var _active_lane: int = 0 setget _set_active_lane
+export(SwitchState) var switch_state = SwitchState.LEFT_OPEN
 
-func _ready() -> void:
-	var lane_idx = 0;
-	for child in get_children():
-		if !child.has_method("receive_power"):
-			continue
-		assert(lane_idx <= 1, "More than two components connected to TwoWaySwitch")
-		_connect_component(lane_idx, child)
-		lane_idx += 1
-	connect("switch_flipped", self, "_on_switch_flipped")
-	_on_switch_flipped(_active_lane)
+signal left_powered(is_powered)
+signal right_powered(is_powered)
 
-
-func _set_active_lane(active_lane: int) -> void:
-	_active_lane = active_lane
-	_on_switch_flipped(active_lane)
-
-
-func _connect_component(lane: int, comp: Node) -> void:
-	connected_components[lane] = comp
-
-
-func _on_switch_flipped(active_lane: int) -> void:
-	if active_lane == 0:
-		play("01-active")
-	else:
-		play("02-active")
-	for lane in connected_components.keys():
-		connected_components[lane].receive_power(lane == active_lane)
+func receive_power(is_powered: bool) -> void:
+	_input.set_powered(is_powered)
 
 
 func toggle() -> void:
-	if _active_lane == 1:
-		_active_lane = 0
+	var new_state
+	if switch_state == SwitchState.LEFT_OPEN:
+		new_state = SwitchState.RIGHT_OPEN
 	else:
-		_active_lane = 1
-	emit_signal("switch_flipped", _active_lane)
+		new_state = SwitchState.LEFT_OPEN
+	_set_switch_state(new_state)
 
 
-func receive_power(powered: bool) -> void:
-	pass
+# =============================================================================
+# Virtual overrides
+# =============================================================================
+
+func _ready() -> void:
+	var err = _click_trigger.connect("input_event", self, "_on_input_event")
+	if OK != err:
+		push_error(err)
+	err = _input.connect("powered", self, "_on_input_powered")
+	if OK != err:
+		push_error(err)
+	err = _left_output.connect("powered", self, "_on_left_output_powered")
+	if OK != err:
+		push_error(err)
+	err = _right_output.connect("powered", self, "_on_right_output_powered")
+	if OK != err:
+		push_error(err)
+	_set_switch_state(switch_state)
+	
+
+func _set_switch_state(new_state) -> void:
+	switch_state = new_state
+	_play_animation()
+	_inactive_output().set_powered(false)
+	_active_output().set_powered(true)
 
 
 func _on_input_event(_viewport: Object, event: InputEvent, _shape_idx: int) -> void:
 	if event.is_action_pressed("mouse_press"):
 		toggle()
+
+
+func _on_input_powered(powered: bool) -> void:
+	_active_output().set_powered(powered)
+
+
+func _play_animation() -> void:
+	if switch_state == SwitchState.LEFT_OPEN:
+		_animation.play("left-open")
+	else:
+		_animation.play("right-open")
+
+
+func _active_output() -> PowerPort:
+	return _left_output if switch_state == SwitchState.LEFT_OPEN else _right_output
+
+
+func _inactive_output() -> PowerPort:
+	return _right_output if switch_state == SwitchState.LEFT_OPEN else _left_output
+
+
+func _on_left_output_powered(powered: bool) -> void:
+	emit_signal("left_powered", powered)
+
+
+func _on_right_output_powered(powered: bool) -> void:
+	emit_signal("right_powered", powered)
+
+
+onready var _click_trigger: Area2D = $ClickTrigger
+onready var _animation: AnimatedSprite = $Animation
+onready var _input: PowerPort = $Input
+onready var _left_output: PowerPort = $LeftOutput
+onready var _right_output: PowerPort = $RightOutput

@@ -9,10 +9,20 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node2D",
+"base": "ElectricalComp",
 "class": "Connector",
 "language": "GDScript",
-"path": "res://objects/connector.gd"
+"path": "res://objects/connector/connector.gd"
+}, {
+"base": "Node2D",
+"class": "ConnectorRenderer",
+"language": "GDScript",
+"path": "res://objects/connector/connector_renderer.gd"
+}, {
+"base": "Node2D",
+"class": "ElectricalComp",
+"language": "GDScript",
+"path": "res://addons/power_network/electrical_comp.gd"
 }, {
 "base": "Node",
 "class": "Fsm",
@@ -49,13 +59,35 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://sensors/light_sensor.gd"
 }, {
-"base": "AnimatedSprite",
+"base": "Resource",
+"class": "PowerNetwork",
+"language": "GDScript",
+"path": "res://addons/power_network/power_network.gd"
+}, {
+"base": "Node",
+"class": "PowerNetworkContainer",
+"language": "GDScript",
+"path": "res://addons/power_network/power_network_container.gd"
+}, {
+"base": "Node2D",
+"class": "PowerPort",
+"language": "GDScript",
+"path": "res://addons/power_network/power_port.gd"
+}, {
+"base": "ElectricalComp",
+"class": "PowerSrc",
+"language": "GDScript",
+"path": "res://objects/power_src.gd"
+}, {
+"base": "ElectricalComp",
 "class": "TwoWaySwitch",
 "language": "GDScript",
 "path": "res://objects/switches/two-way-switch.gd"
 } ]
 _global_script_class_icons={
 "Connector": "",
+"ConnectorRenderer": "",
+"ElectricalComp": "",
 "Fsm": "",
 "FsmState": "",
 "KidController": "",
@@ -63,6 +95,10 @@ _global_script_class_icons={
 "LightController": "",
 "LightEmitter": "",
 "LightSensor": "",
+"PowerNetwork": "",
+"PowerNetworkContainer": "",
+"PowerPort": "",
+"PowerSrc": "",
 "TwoWaySwitch": ""
 }
 
@@ -71,6 +107,10 @@ _global_script_class_icons={
 config/name="Mech-KID-oid"
 run/main_scene="res://demo-level.tscn"
 config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "power_network" )
 
 [importer_defaults]
 

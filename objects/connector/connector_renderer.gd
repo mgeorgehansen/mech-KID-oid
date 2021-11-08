@@ -1,5 +1,5 @@
 tool
-class_name Connector
+class_name ConnectorRenderer
 extends Node2D
 
 var _upstream: Node2D
@@ -32,11 +32,8 @@ func _draw() -> void:
 func _relative_position(pos: Vector2) -> Vector2:
 	return pos - global_position
 
+
 func _process(_delta: float) -> void:
 	update()
 
 
-func receive_power(powered: bool) -> void:
-	_powered = powered
-	_upstream.receive_power(powered)
-	_downstream.receive_power(powered)

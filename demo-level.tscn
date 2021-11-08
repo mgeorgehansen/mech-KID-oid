@@ -1,10 +1,10 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://characters/mech-KID-oid/kid.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/light/light.tscn" type="PackedScene" id=2]
 [ext_resource path="res://environment/tileset01_prototype_basicTiles.png" type="Texture" id=3]
 [ext_resource path="res://objects/switches/two-way-switch.tscn" type="PackedScene" id=4]
-[ext_resource path="res://objects/connector.gd" type="Script" id=5]
+[ext_resource path="res://objects/power_src.tscn" type="PackedScene" id=6]
 
 [sub_resource type="TileSet" id=1]
 0/name = "tileset01_prototype_basicTiles.png 0"
@@ -625,6 +625,83 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 } ]
 23/z_index = 0
 
+[sub_resource type="VisualScriptFunctionCall" id=26]
+call_mode = 1
+base_type = "Light2D"
+node_path = NodePath("Light1")
+argument_cache = {
+"args": [  ],
+"default_args": [  ],
+"flags": 1,
+"id": 0,
+"name": "",
+"return": {
+"class_name": "",
+"hint": 0,
+"hint_string": "",
+"name": "",
+"type": 0,
+"usage": 7
+}
+}
+
+[sub_resource type="VisualScriptFunctionCall" id=27]
+call_mode = 1
+base_type = "Node2D"
+node_path = NodePath("PowerSrc")
+argument_cache = {
+"args": [  ],
+"default_args": [  ],
+"flags": 1,
+"id": 0,
+"name": "",
+"return": {
+"class_name": "",
+"hint": 0,
+"hint_string": "",
+"name": "",
+"type": 0,
+"usage": 7
+}
+}
+
+[sub_resource type="VisualScriptFunctionCall" id=28]
+call_mode = 1
+base_type = "Node2D"
+node_path = NodePath("TwoWaySwitch")
+argument_cache = {
+"args": [  ],
+"default_args": [  ],
+"flags": 1,
+"id": 0,
+"name": "",
+"return": {
+"class_name": "",
+"hint": 0,
+"hint_string": "",
+"name": "",
+"type": 0,
+"usage": 7
+}
+}
+
+[sub_resource type="VisualScript" id=29]
+data = {
+"base_type": "Node",
+"functions": [ {
+"data_connections": [  ],
+"function_id": -1,
+"name": "f_312843592",
+"nodes": [ 0, Vector2( 420, 120 ), SubResource( 26 ), 1, Vector2( -30, 250 ), SubResource( 27 ), 2, Vector2( 310, 330 ), SubResource( 28 ) ],
+"scroll": Vector2( -50, -100 ),
+"sequence_connections": [  ]
+} ],
+"is_tool_script": false,
+"signals": [  ],
+"variables": [  ],
+"vs_unify": true
+}
+
 [node name="Node2D" type="Node2D"]
 
 [node name="mech-KID-oid" parent="." instance=ExtResource( 1 )]
@@ -647,19 +724,21 @@ tile_data = PoolIntArray( 65534, 2, 0, 65535, 2, 0, 0, 2, 0, 1, 8, 0, 2, 17, 0, 
 visible = false
 color = Color( 0.246094, 0.246094, 0.246094, 1 )
 
-[node name="TwoWaySwitch" parent="." instance=ExtResource( 4 )]
+[node name="Node" type="Node" parent="."]
+script = SubResource( 29 )
+
+[node name="Light1" parent="Node" instance=ExtResource( 2 )]
+position = Vector2( 134.994, 192.055 )
+enabled = true
+
+[node name="Light2" parent="Node" instance=ExtResource( 2 )]
+position = Vector2( 322.37, 199.439 )
+
+[node name="TwoWaySwitch" parent="Node" instance=ExtResource( 4 )]
 position = Vector2( 228.286, 169.844 )
 
-[node name="Connector" type="Node2D" parent="TwoWaySwitch"]
-script = ExtResource( 5 )
-
-[node name="Light1" parent="TwoWaySwitch/Connector" instance=ExtResource( 2 )]
-position = Vector2( -93.4551, 22.0481 )
-enabled = true
-on = true
-
-[node name="Connector2" type="Node2D" parent="TwoWaySwitch"]
-script = ExtResource( 5 )
-
-[node name="Light2" parent="TwoWaySwitch/Connector2" instance=ExtResource( 2 )]
-position = Vector2( 93.8029, 29.5951 )
+[node name="PowerSrc" parent="Node" instance=ExtResource( 6 )]
+position = Vector2( 226.135, 124.581 )
+[connection signal="left_powered" from="Node/TwoWaySwitch" to="Node/Light1" method="receive_power"]
+[connection signal="right_powered" from="Node/TwoWaySwitch" to="Node/Light2" method="receive_power"]
+[connection signal="powered" from="Node/PowerSrc" to="Node/TwoWaySwitch" method="receive_power"]

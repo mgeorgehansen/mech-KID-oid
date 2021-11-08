@@ -1,44 +1,62 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://objects/switches/two-way-switch.gd" type="Script" id=1]
 [ext_resource path="res://objects/switches/two-way-switch.png" type="Texture" id=2]
-
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 16, 16, 16 )
+[ext_resource path="res://addons/power_network/power_port.gd" type="Script" id=3]
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 16, 16 )
 
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 16, 16, 16 )
+
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ SubResource( 1 ) ],
-"loop": true,
-"name": "01-active",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 2 ) ],
 "loop": true,
-"name": "02-active",
+"name": "right-open",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "left-open",
 "speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 9.25073, 6.225 )
 
-[node name="TwoWaySwitch" type="AnimatedSprite"]
-position = Vector2( 0, 0.676956 )
-frames = SubResource( 3 )
-animation = "01-active"
-playing = true
+[node name="TwoWaySwitch" type="Node2D"]
+position = Vector2( 0.0460567, 0.0460567 )
 script = ExtResource( 1 )
 
+[node name="Animation" type="AnimatedSprite" parent="."]
+position = Vector2( 0, 0.676956 )
+frames = SubResource( 3 )
+animation = "right-open"
+playing = true
+
 [node name="ClickTrigger" type="Area2D" parent="."]
+position = Vector2( 0, 0.676956 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClickTrigger"]
-position = Vector2( 0, -1.21653 )
+position = Vector2( 0.0460587, -1.21653 )
 shape = SubResource( 4 )
-[connection signal="input_event" from="ClickTrigger" to="." method="_on_input_event"]
+
+[node name="Input" type="Node2D" parent="."]
+position = Vector2( 0, -6 )
+script = ExtResource( 3 )
+
+[node name="LeftOutput" type="Node2D" parent="."]
+position = Vector2( -4.00691, 4.36272 )
+script = ExtResource( 3 )
+polarity = 1
+
+[node name="RightOutput" type="Node2D" parent="."]
+position = Vector2( 3.91481, 4.54694 )
+script = ExtResource( 3 )
+polarity = 1

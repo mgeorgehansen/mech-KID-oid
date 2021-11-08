@@ -2,13 +2,16 @@ tool
 class_name LightController
 extends Light2D
 
-export var on: bool = false
+func receive_power(powered: bool) -> void:
+	if powered:
+		turn_on()
+	else:
+		turn_off()
 
-onready var light_emitter: LightEmitter = $LightEmitter
-onready var animation: AnimatedSprite = $Animation
 
 func _ready() -> void:
-	_toggle(on)
+	turn_off()
+
 
 func _toggle(on_: bool) -> void:
 	if on_:
@@ -16,20 +19,18 @@ func _toggle(on_: bool) -> void:
 	else:
 		turn_off()
 
+
 func turn_off() -> void:
-	on = false
 	enabled = false
-	light_emitter.turn_off()
-	animation.play("idle")
+	_light_emitter.turn_off()
+	_animation.play("idle")
+
 
 func turn_on() -> void:
-	on = true
 	enabled = true
-	light_emitter.turn_on()
-	animation.play("lit_af")
+	_light_emitter.turn_on()
+	_animation.play("lit_af")
 
-func receive_power(powered: bool) -> void:
-	if powered:
-		turn_on()
-	else:
-		turn_off()
+onready var _light_emitter: LightEmitter = $LightEmitter
+onready var _animation: AnimatedSprite = $Animation
+onready var _input: PowerPort = $Input
